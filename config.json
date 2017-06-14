@@ -1,8 +1,7 @@
 {
    "source": {
-     "pathToSpreadsheet": "/import-on-open/source",
-     "sheet": "sheet1",
-     "range": "A:J"
+     "pathToSpreadsheet": "/import-values/source",
+     "sheet": "sheet1"
    
    },
    "destination": {
