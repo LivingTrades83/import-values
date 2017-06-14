@@ -1,0 +1,11 @@
+{
+   "source": {
+     "pathToSpreadsheet": "/import-on-open/source",
+     "sheet": "sheet1",
+     "range": "A:J"
+   
+   },
+   "destination": {
+     "sheet": "sheet2"
+   }
+}
