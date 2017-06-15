@@ -1,6 +1,6 @@
 // config 
 
-var config = importConfiguration("https://raw.githubusercontent.com/jcodesmn/easy-csv/master/apple-school-manager.json");
+var config = importConfiguration("https://raw.githubusercontent.com/jcodesmn/import-values/master/config.json");
 
 function jsonFromUrl(url) {
   var rsp  = UrlFetchApp.fetch(url);
