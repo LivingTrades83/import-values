@@ -57,6 +57,15 @@ function arrSheetNames(ssObj) {
 
 // files, folders, sheets
 
+function findFileIn(fldr, name) {
+  var files = filesIn(fldr);
+  var names = fileNames(files);
+  if (checkValIn(names, name)) {
+    var file = fldr.getFilesByName(name).next();
+    return file;
+  }
+}
+
 function filesIn(fldr) {
   var fi  = fldr.getFiles();
   var arr = [];
@@ -91,6 +100,37 @@ function findFileAtPath(path) {
   return findFileIn(fldr, file);
 } 
 
+function findFileAtRoot(name) {
+  var rf    = DriveApp.getRootFolder();
+  var files = rootFiles();
+  var names = fileNames(files);
+  if (checkValIn(names, name)) {
+    var file = rf.getFilesByName(name).next();
+    return file;
+  }
+}
+
+
+function rootFiles() {
+  var rf = DriveApp.getRootFolder();
+  var fi = rf.getFiles();
+  var arr = [];
+  while (fi.hasNext()) {
+    var file = fi.next();
+    arr.push(file);
+  } 
+  return arr;
+}
+
+function fileNames(files) {
+  var arr = [];
+  for (var i = 0; i < files.length; i++) {
+    var name = files[i].getName();
+    arr.push(name);
+  }
+  return arr;
+}
+
 function openFileAsSpreadsheet(file) {
   var _id = file.getId();
   var _ss = SpreadsheetApp.openById(_id);
@@ -98,15 +138,16 @@ function openFileAsSpreadsheet(file) {
 } 
 
 function runRecipe() {
+  Logger.log(config);
+  Logger.log(config.source.pathToSpreadsheet);
 
-  var originFile   = findFileAtPath(config.source.pathToSpreadsheet);
-  var originSS     = openFileAsSpreadsheet(originFile);
-  var originSNames = arrSheetNames(originSS);
-  var originSheet  = originSS.getSheetByName(config.source.sheet);
-  var originNumCol = originSheet.getNumRows();
-  var originNumRow = originSheet.getNumColumns();
-  Logger.log(originNumCol);
-  Logger.log(originNumRow);
+  var originFile    = findFileAtRoot(config.source.pathToSpreadsheet);
+  var originSS      = openFileAsSpreadsheet(originFile);
+  // var originSNames = arrSheetNames(originSS);
+  var originSheet   = originSS.getSheetByName(config.source.sheet);
+  var originLastRow = originSheet.getLastRow();
+  var originLastCol = originSheet.getLastColumn();
+  var _originRange  = originSheet.getRange("A1:J21");
 
   // from documentation
 
@@ -118,9 +159,8 @@ function runRecipe() {
   // rowEnd	Integer	the end row of the target range
 
   var destSS       = SpreadsheetApp.getActiveSpreadsheet();
-  var destSNames   = arrSheetNames(destSS);
+  // var destSNames   = arrSheetNames(destSS);
   var destSheet    = destSS.getSheetByName(config.destination.sheet);
-
-
+  _originRange.copyValuesToRange(destSheet, 1, originLastCol, 1, originLastRow);
 
 }
