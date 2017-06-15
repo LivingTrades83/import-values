@@ -1,6 +1,6 @@
 {
    "source": {
-     "pathToSpreadsheet": "/import-values/source",
+     "pathToSpreadsheet": "import-values",
      "sheet": "sheet1"
    
    },

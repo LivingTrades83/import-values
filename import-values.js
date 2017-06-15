@@ -28,7 +28,7 @@ function arrSheetNames(ssObj) {
   return arr;
 } 
 
-// files and folders
+// files, folders, sheets
 
 function filesIn(fldr) {
   var fi  = fldr.getFiles();
@@ -64,15 +64,24 @@ function findFileAtPath(path) {
   return findFileIn(fldr, file);
 } 
 
+function openFileAsSpreadsheet(file) {
+  var _id = file.getId();
+  var _ss = SpreadsheetApp.openById(_id);
+  return _ss;
+} 
+
 function runRecipe() {
 
-  var originSS     = findFileAtPath(config.source.pathToSpreadsheet);
-  // var originSNames = arrSheetNames(originSS);
+  var originFile   = findFileAtPath(config.source.pathToSpreadsheet);
+  var originSS     = openFileAsSpreadsheet(originFile);
+  var originSNames = arrSheetNames(originSS);
   var originSheet  = originSS.getSheetByName(config.source.sheet);
   var originNumCol = originSheet.getNumRows();
   var originNumRow = originSheet.getNumColumns();
+  Logger.log(originNumCol);
+  Logger.log(originNumRow);
 
-  // from docs
+  // from documentation
 
   // copyValuesToRange(sheet, column, columnEnd, row, rowEnd);
   // sheet	Sheet	the target sheet
@@ -82,7 +91,9 @@ function runRecipe() {
   // rowEnd	Integer	the end row of the target range
 
   var destSS       = SpreadsheetApp.getActiveSpreadsheet();
-  // var destSNames   = arrSheetNames(destSS);
+  var destSNames   = arrSheetNames(destSS);
   var destSheet    = destSS.getSheetByName(config.destination.sheet);
+
+
 
 }
