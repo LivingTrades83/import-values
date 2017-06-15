@@ -2,6 +2,33 @@
 
 var config = importConfiguration("https://raw.githubusercontent.com/jcodesmn/easy-csv/master/apple-school-manager.json");
 
+function jsonFromUrl(url) {
+  var rsp  = UrlFetchApp.fetch(url);
+  var data = rsp.getContentText();
+  var json = JSON.parse(data);
+  return json;
+} 
+
+function jsonFromFile(file) {
+  var data = file.getBlob().getDataAsString();
+  var json = JSON.parse(data);
+  return json;
+} 
+
+function importConfiguration(scriptConfig) {
+  var regExp = new RegExp("^(http|https)://");
+  var test   = regExp.test(scriptConfig);
+  var json;
+  if (test) {
+    json = jsonFromUrl(scriptConfig); 
+    return json;
+  } else {
+    var file = findFileAtPath(scriptConfig); 
+    json = jsonFromFile(file); 
+    return json;
+  }
+}
+
 // menu
 
 function onOpen() {
