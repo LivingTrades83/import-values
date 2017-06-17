@@ -143,30 +143,33 @@ function openFileAsSpreadsheet(file) {
 } 
 
 function runScript() {
-  var oFile    = findFileAtPath(config.source.pathToSpreadsheet);
-
-  // if (oFile !== undefined) {
-    var oSS      = openFileAsSpreadsheet(oFile);
-    var oSNames  = arrSheetNames(oSS);
-    Logger.log(oSNames);
-    Logger.log(config.source.sheet);
-  
-    // if (!(checkValIn(oSNames, config.source.sheet))) return false;
-
-
-    var oSheet   = oSS.getSheetByName(config.source.sheet);
-    var oLastRow = oSS.getLastRow();
-    var oLastCol = oSS.getLastColumn();
-    var _oRange  = oSheet.getRange("A1:J21");
-    var dSS      = SpreadsheetApp.getActiveSpreadsheet();
-    var dSNames  = arrSheetNames(dSS);
-    var dSheet   = dSS.getSheetByName(config.destination.sheet);
-    _oRange.copyValuesToRange(dSheet, 1, oLastCol, 1, oLastRow);
-  // } else {
-  //   Logger.log("No file found at path " + config.source.pathToSpreadsheet);
-  // }
-
-
-
-
+  var oFile = findFileAtPath(config.origin.pathToSpreadsheet);
+  if (oFile) {
+    var oSS = openFileAsSpreadsheet(oFile);
+    if (oSS) {
+      var oSNames  = arrSheetNames(oSS);
+      if (checkValIn(oSNames, config.origin.sheet)) {
+        var oSheet   = oSS.getSheetByName(config.origin.sheet);
+        var oLastRow = oSS.getLastRow();
+        var oLastCol = oSS.getLastColumn();
+        // add in Scope
+        var _oRange  = oSheet.getRange("A1:J21");
+        var dSS      = SpreadsheetApp.getActiveSpreadsheet();
+        var dSNames  = arrSheetNames(dSS);
+        if (checkValIn(dSNames, config.destination.sheet)) {
+          var dSheet   = dSS.getSheetByName(config.destination.sheet);
+          _oRange.copyValuesToRange(dSheet, 1, oLastCol, 1, oLastRow);
+        } else {
+          Logger.log("Couldn't find sheet " + config.destination.sheet );
+        
+        }
+      } else {
+        Logger.log("Couldn't find sheet " + config.origin.sheet + " in origin Spreadsheet");
+      }
+    } else {
+      Logger.log("Couldn't open file at path " + config.origin.pathToSpreadsheet + " as a Spreadsheet");
+    }
+  } else {
+    Logger.log("Couldn't find a file at path " + config.origin.pathToSpreadsheet);
+  }
 }

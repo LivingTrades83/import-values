@@ -1,8 +1,7 @@
 {
-   "source": {
+   "origin": {
      "pathToSpreadsheet": "import-values",
      "sheet": "Sheet1"
-   
    },
    "destination": {
      "sheet": "Sheet2"
