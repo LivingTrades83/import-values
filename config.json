@@ -1,10 +1,10 @@
 {
    "source": {
      "pathToSpreadsheet": "import-values",
-     "sheet": "sheet1"
+     "sheet": "Sheet1"
    
    },
    "destination": {
-     "sheet": "sheet2"
+     "sheet": "Sheet2"
    }
 }

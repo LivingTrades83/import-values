@@ -77,8 +77,10 @@ function filesIn(fldr) {
 }
 
 function findFileAtPath(path) {
+  var file;
   var arr  = path.split('/');
-  var file = arr[arr.length -1];
+  if (arr.length >= 2) {
+  file = arr[arr.length -1];
   var fldr, fi;
   for (i = 0; i < arr.length - 1; i++) {
     if (i === 0) {
@@ -98,6 +100,10 @@ function findFileAtPath(path) {
     }
   } 
   return findFileIn(fldr, file);
+  } else {
+    file = findFileAtRoot(path);
+    return file;
+  }
 } 
 
 function findFileAtRoot(name) {
@@ -136,18 +142,31 @@ function openFileAsSpreadsheet(file) {
   return _ss;
 } 
 
-function runRecipe() {
-  // o for origin, d for destination
-  var oFile    = findFileAtRoot(config.source.pathToSpreadsheet);
-  var oSS      = openFileAsSpreadsheet(oFile);
-  var oSNames  = arrSheetNames(oSS);
-  var oSheet   = oSS.getSheetByName(config.source.sheet);
-  var oLastRow = oSS.getLastRow();
-  var oLastCol = oSS.getLastColumn();
-  var _oRange  = oSheet.getRange("A1:J21");
-  var dSS      = SpreadsheetApp.getActiveSpreadsheet();
-  var dSNames  = arrSheetNames(dSS);
-  var dSheet   = dSS.getSheetByName(config.destination.sheet);
-  _oRange.copyValuesToRange(dSheet, 1, oLastCol, 1, oLastRow);
+function runScript() {
+  var oFile    = findFileAtPath(config.source.pathToSpreadsheet);
+
+  // if (oFile !== undefined) {
+    var oSS      = openFileAsSpreadsheet(oFile);
+    var oSNames  = arrSheetNames(oSS);
+    Logger.log(oSNames);
+    Logger.log(config.source.sheet);
+  
+    // if (!(checkValIn(oSNames, config.source.sheet))) return false;
+
+
+    var oSheet   = oSS.getSheetByName(config.source.sheet);
+    var oLastRow = oSS.getLastRow();
+    var oLastCol = oSS.getLastColumn();
+    var _oRange  = oSheet.getRange("A1:J21");
+    var dSS      = SpreadsheetApp.getActiveSpreadsheet();
+    var dSNames  = arrSheetNames(dSS);
+    var dSheet   = dSS.getSheetByName(config.destination.sheet);
+    _oRange.copyValuesToRange(dSheet, 1, oLastCol, 1, oLastRow);
+  // } else {
+  //   Logger.log("No file found at path " + config.source.pathToSpreadsheet);
+  // }
+
+
+
 
 }
