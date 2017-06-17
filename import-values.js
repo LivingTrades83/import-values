@@ -55,6 +55,26 @@ function arrSheetNames(ssObj) {
   return arr;
 } 
 
+function numCol(number) {
+  var num = number - 1, chr;
+  if (num <= 25) {
+    chr = String.fromCharCode(97 + num).toUpperCase();
+    return chr;
+  } else if (num >= 26 && num <= 51) {
+    num -= 26;
+    chr = String.fromCharCode(97 + num).toUpperCase();
+    return "A" + chr;
+  } else if (num >= 52 && num <= 77) {
+    num -= 52;
+    chr = String.fromCharCode(97 + num).toUpperCase();
+    return "B" + chr;
+  } else if (num >= 78 && num <= 103) {
+    num -= 78;
+    chr = String.fromCharCode(97 + num).toUpperCase();
+    return "C" + chr;
+  }
+}
+
 // files, folders, sheets
 
 function findFileIn(fldr, name) {
@@ -147,21 +167,19 @@ function runScript() {
   if (oFile) {
     var oSS = openFileAsSpreadsheet(oFile);
     if (oSS) {
-      var oSNames  = arrSheetNames(oSS);
+      var oSNames = arrSheetNames(oSS);
       if (checkValIn(oSNames, config.origin.sheet)) {
         var oSheet   = oSS.getSheetByName(config.origin.sheet);
         var oLastRow = oSS.getLastRow();
         var oLastCol = oSS.getLastColumn();
-        // add in Scope
-        var _oRange  = oSheet.getRange("A1:J21");
+        var oRange   = oSheet.getRange("A1:" + numCol(oLastCol) + oLastRow);
         var dSS      = SpreadsheetApp.getActiveSpreadsheet();
         var dSNames  = arrSheetNames(dSS);
         if (checkValIn(dSNames, config.destination.sheet)) {
-          var dSheet   = dSS.getSheetByName(config.destination.sheet);
-          _oRange.copyValuesToRange(dSheet, 1, oLastCol, 1, oLastRow);
+          var dSheet = dSS.getSheetByName(config.destination.sheet);
+          oRange.copyValuesToRange(dSheet, 1, oLastCol, 1, oLastRow);
         } else {
-          Logger.log("Couldn't find sheet " + config.destination.sheet );
-        
+          Logger.log("Couldn't find sheet " + config.destination.sheet + " in destination Spreadsheet");
         }
       } else {
         Logger.log("Couldn't find sheet " + config.origin.sheet + " in origin Spreadsheet");
