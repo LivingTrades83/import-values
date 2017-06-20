@@ -1,9 +1,9 @@
 {
-   "origin": {
-     "pathToSpreadsheet": "import-values",
-     "sheet": "Sheet1"
-   },
-   "destination": {
-     "sheet": "Sheet2"
-   }
+  "input": {
+    "pathToSpreadsheet": "import-values",
+    "sheet": "Sheet1"
+  },
+  "output": {
+    "sheet": "Sheet2"
+  }
 }
