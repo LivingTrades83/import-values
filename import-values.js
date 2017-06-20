@@ -1,5 +1,7 @@
 // config 
 
+// MODIFY -> input / output (JSON + script)
+
 var config = importConfiguration("https://raw.githubusercontent.com/jcodesmn/import-values/master/config.json");
 
 function jsonFromUrl(url) {
